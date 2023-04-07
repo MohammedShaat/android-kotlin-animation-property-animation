@@ -21,4 +21,6 @@
     <string name="scale">Scale</string>
     <string name="fade">Fade</string>
     <string name="shower">Shower</string>
+    <string name="translate_x_y_diagonal">translate X-Y Diagonal</string>
+    <string name="transalte_x_y_up_down">transalte x y up down</string>
 </resources>

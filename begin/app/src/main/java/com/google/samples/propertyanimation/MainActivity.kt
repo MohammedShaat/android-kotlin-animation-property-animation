@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var fadeButton: Button
     lateinit var colorizeButton: Button
     lateinit var showerButton: Button
+    lateinit var translateXYDiagonalButton: Button
+    lateinit var translateXYUpDownButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         fadeButton = findViewById<Button>(R.id.fadeButton)
         colorizeButton = findViewById<Button>(R.id.colorizeButton)
         showerButton = findViewById<Button>(R.id.showerButton)
+        translateXYDiagonalButton = findViewById<Button>(R.id.translateXYDiagonalButton)
+        translateXYUpDownButton = findViewById<Button>(R.id.translateXYUpDownButton)
 
         rotateButton.setOnClickListener {
             rotater()
@@ -79,6 +83,14 @@ class MainActivity : AppCompatActivity() {
 
         showerButton.setOnClickListener {
             shower()
+        }
+
+        translateXYDiagonalButton.setOnClickListener {
+            translatorXYDiagonal()
+        }
+
+        translateXYUpDownButton.setOnClickListener {
+            translatorXYUpDown()
         }
     }
 
@@ -165,7 +177,8 @@ class MainActivity : AppCompatActivity() {
         container.addView(newStar)
 
         val rotator = ObjectAnimator.ofFloat(newStar, View.ROTATION, Math.random().toFloat() * 1080)
-        val translator = ObjectAnimator.ofFloat(newStar, View.TRANSLATION_Y, -starW, containerH + starW)
+        val translator =
+            ObjectAnimator.ofFloat(newStar, View.TRANSLATION_Y, -starW, containerH + starW)
         translator.interpolator = AccelerateInterpolator(1f)
 
         val animatorSet = AnimatorSet()
@@ -176,6 +189,64 @@ class MainActivity : AppCompatActivity() {
                 container.removeView(newStar)
             }
         })
+        animatorSet.start()
+    }
+
+    private fun translatorXYDiagonal() {
+        val container = star.parent as ViewGroup
+        val containerW = container.width.toFloat()
+        val containerH = container.height.toFloat()
+        val starW = star.width.toFloat()
+
+        val translateX = PropertyValuesHolder.ofFloat(View.TRANSLATION_X, -(containerW / 2 - starW), containerW / 2 - starW)
+        val translationY = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, -200f)
+        val animator = ObjectAnimator.ofPropertyValuesHolder(star, translateX, translationY)
+        animator.duration = 2_000
+        animator.repeatCount = 1
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                translateXYDiagonalButton.isEnabled = false
+            }
+            override fun onAnimationEnd(animation: Animator?) {
+                translateXYDiagonalButton.isEnabled = true
+                star.translationX = 0f
+                star.translationY = 0f
+            }
+        })
+        animator.start()
+    }
+
+    private fun translatorXYUpDown() {
+        val container = star.parent as ViewGroup
+        val containerW = container.width.toFloat()
+        val containerH = container.height.toFloat()
+        val starW = star.width.toFloat()
+
+        val translatorX = ObjectAnimator.ofFloat(star, View.TRANSLATION_X, -(containerW / 2 - starW), containerW / 2 - starW)
+        translatorX.duration = 2_500
+        translatorX.repeatCount = 1
+        translatorX.repeatMode = ObjectAnimator.REVERSE
+        translatorX.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                translateXYUpDownButton.isEnabled = false
+            }
+            override fun onAnimationEnd(animation: Animator?) {
+                translateXYUpDownButton.isEnabled = true
+                star.translationX = 0f
+                star.translationY = 0f
+            }
+        })
+
+        val translatorY = ObjectAnimator.ofFloat(star, View.TRANSLATION_Y, -250f)
+        translatorY.duration = translatorX.duration / 6
+        translatorY.repeatCount =
+            (translatorX.duration / translatorY.duration).toInt() *
+                    (translatorX.repeatCount + 1) - 1
+        translatorY.repeatMode = ObjectAnimator.REVERSE
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(translatorX, translatorY)
         animatorSet.start()
     }
 
