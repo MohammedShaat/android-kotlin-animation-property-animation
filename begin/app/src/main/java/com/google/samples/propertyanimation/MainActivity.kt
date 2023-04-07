@@ -96,42 +96,46 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun translater() {
-        val animator = ObjectAnimator.ofFloat(
-            star,
-            View.TRANSLATION_X,
-            200f
-        )
-        animator.repeatCount = 1
-        animator.repeatMode = ObjectAnimator.REVERSE
-        animator.disableButtonDuringAnimation(translateButton)
-        animator.start()
+        val animator = ObjectAnimator.ofFloat(star, View.TRANSLATION_X, 200f)
+            .apply {
+                repeatCount = 1
+                repeatMode = ObjectAnimator.REVERSE
+                disableButtonDuringAnimation(translateButton)
+                start()
+            }
     }
 
     private fun scaler() {
         val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 4f)
         val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 4f)
         val animator = ObjectAnimator.ofPropertyValuesHolder(star, scaleX, scaleY)
-        animator.repeatCount = 1
-        animator.repeatMode = ObjectAnimator.REVERSE
-        animator.disableButtonDuringAnimation(scaleButton)
-        animator.start()
+            .apply {
+                repeatCount = 1
+                repeatMode = ObjectAnimator.REVERSE
+                disableButtonDuringAnimation(scaleButton)
+                start()
+            }
     }
 
     private fun fader() {
         val animator = ObjectAnimator.ofFloat(star, View.ALPHA, 0f)
-        animator.repeatCount = 1
-        animator.repeatMode = ObjectAnimator.REVERSE
-        animator.disableButtonDuringAnimation(fadeButton)
-        animator.start()
+            .apply {
+                repeatCount = 1
+                repeatMode = ObjectAnimator.REVERSE
+                disableButtonDuringAnimation(fadeButton)
+                start()
+            }
     }
 
     @SuppressLint("ObjectAnimatorBinding")
     private fun colorizer() {
         val animator = ObjectAnimator.ofArgb(star.parent, "backgroundColor", Color.BLACK, Color.RED)
-        animator.repeatCount = 1
-        animator.repeatMode = ObjectAnimator.REVERSE
-        animator.disableButtonDuringAnimation(colorizeButton)
-        animator.start()
+            .apply {
+                repeatCount = 1
+                repeatMode = ObjectAnimator.REVERSE
+                disableButtonDuringAnimation(colorizeButton)
+                start()
+            }
     }
 
     private fun shower() {
